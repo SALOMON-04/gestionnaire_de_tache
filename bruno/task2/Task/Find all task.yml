@@ -1,0 +1,40 @@
+info:
+  name: Find all task
+  type: http
+  seq: 2
+
+http:
+  method: GET
+  url: "{{base_url}}/tasks"
+  headers:
+    - name: Authorization
+      value: Bearer{{token}}
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("status 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("le body est un tableau", function () {
+          expect(res.getBody()).to.be.an("array");
+        });
+
+        test("chaque tâche a les champs clés", function () {
+          res.getBody().forEach(function (task) {
+            expect(task).to.have.property("id");
+            expect(task).to.have.property("title");
+            expect(task).to.have.property("priority");
+            expect(task).to.have.property("completed");
+          });
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

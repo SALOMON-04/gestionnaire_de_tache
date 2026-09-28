@@ -1,0 +1,40 @@
+info:
+  name: Update task
+  type: http
+  seq: 4
+
+http:
+  method: PATCH
+  url: "{{base_url}}/tasks/{{taskId}}"
+  headers:
+    - name: Authorization
+      value: Bearer{{token}}
+  body:
+    type: json
+    data: |-
+      {
+        "title": "local",
+        "priority": "low",
+        "description": "iodes"
+        
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        test("status 200", function () {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("title mis à jour", function () {
+          expect(res.getBody().title).to.equal(req.getBody().title);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

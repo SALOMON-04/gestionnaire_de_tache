@@ -1,0 +1,46 @@
+info:
+  name: Create tasks
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/tasks"
+  headers:
+    - name: Authorization
+      value: Bearer {{tokent}}
+  body:
+    type: json
+    data: |-
+      {
+        "title": "kodal",
+        "priority": "low",
+        "description": "xavier"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: bru.setEnvVar("taskId", res.getBody().id)
+    - type: tests
+      code: |-
+        test("status 201", function () {
+          expect(res.getStatus()).to.equal(201);
+        });
+
+        test("title correspond à la requête", function () {
+          const requestBody = req.getBody();
+          expect(res.getBody().title).to.equal(requestBody.title);
+        });
+
+        test("Appartient au bon utlisateur", function () {
+          expect(res.getBody().userId).to.equal(bru.getEnvVar("userId"));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

@@ -1,0 +1,43 @@
+info:
+  name: Register
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{base_url}}/api/auth/sign-up/email"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "bakand@gmail.com",
+        "password": "motpasse123",
+        "name": "bakan"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setEnvVar("token", res.getBody().token);
+        bru.setEnvVar("userId", res.getBody().user.id);
+    - type: tests
+      code: |-
+        test("status 200", function(){
+          expect(res.getStatus()).to.equal(200);
+        });
+        test("token present", function(){
+          expect(res.getBody().token).to.be.a("string")
+        });
+        test("email correspond à la requette", function(){
+          const requestBody = req.getBody();
+          expect(res.getBody().user.email.to.equal(requestBody.email));
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5
+  forwardAuthorizationHeader: false

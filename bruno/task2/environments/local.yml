@@ -1,0 +1,12 @@
+name: local
+variables:
+  - name: userId
+    value: qfNFdcArJgGdkIYNqO9TrDSInKfw9wkp
+  - name: token
+    value:
+      type: number
+      data: "1"
+  - name: taskId
+    value:
+      type: number
+      data: "3"
