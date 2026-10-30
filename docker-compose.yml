@@ -1,0 +1,19 @@
+service:
+  db:
+      image: postgres:16            # l'image utilisée : PostgreSQL version 16
+      restart: unless-stopped        # relance le conteneur après un redémarrage, sauf si tu l'as arrêté
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRETS_PASSWORD: postgres
+        POSTGRES_DB: taskapi
+      ports: - "5432:5432"
+      volumes: - "donnees:/var/lib/postgresql/data"
+      healthcheck:
+        test: ["CMD",  "pg_isready -U  -d taskapi"]
+        interval: 5s
+        timeout: 5s
+        retries: 10
+
+  
+  donnees:                        #volumes:déclaration des volumes 
+    donnees:                      # crée le volume nommé "donnees"
