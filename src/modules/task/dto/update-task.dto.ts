@@ -5,9 +5,9 @@ import { prioritySchema } from "./create-task.dto.js";
 
 export class updateTaskDto extends createZodDto (
     z.object({
-        title: z.string().trim().min(1),
+        title: z.string().trim().min(1).optional(),
 		description: z.string().optional(),
-        priority: prioritySchema,
+        priority: prioritySchema.optional(),
         completed: z.boolean().optional(),
     }),
 ){}

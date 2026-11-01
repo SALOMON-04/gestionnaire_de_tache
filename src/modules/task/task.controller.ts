@@ -11,8 +11,7 @@ import {
      HttpStatus,
      Param, 
      ParseIntPipe, 
-     Patch, Post, 
-     Put, 
+     Patch, Post,
      Query 
 } from "@nestjs/common";
 
@@ -64,7 +63,7 @@ export class tasksController {
         @Param('id', ParseIntPipe) id: number,
         @Body() dto: updateTaskDto
     ){
-        return this.taskService.complete(session.user.id, id)
+        return this.taskService.update(session.user.id, id, dto)
     }
 
 

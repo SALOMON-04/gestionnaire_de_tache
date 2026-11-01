@@ -3,7 +3,7 @@ import { PrismaService } from "../../prisma/prisma.service.js";
 import { createTaskDto } from "./dto/create-task.dto.js";
 import { listTasksQuerydto } from "./dto/list_task.dto.js";
 import { updateTaskDto } from "./dto/update-task.dto.js";
-import { filter } from "rxjs";
+
 
 
 
@@ -20,7 +20,10 @@ export class taskService {
 
     findAll(userId: string, dto: listTasksQuerydto) {
         return this.prisma.task.findMany({
-            where: {userId, ...filter},
+            where: {userId, 
+                    ...(dto.completed !== undefined && { completed: dto.completed }),
+                    ...(dto.priority && { priority: dto.priority }),
+            },
             orderBy: {createdAt: "desc"},
         });
     }

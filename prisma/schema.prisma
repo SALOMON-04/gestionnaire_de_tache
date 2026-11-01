@@ -38,7 +38,7 @@ model User {
 model Task {
   id          Int      @id @default(autoincrement())
   title       String
-  description String?
+  description String? 
   priority    Priority
   completed   Boolean  @default(false)
   createdAt   DateTime @default(now())
